@@ -71,7 +71,7 @@ packagetest:archlinux:
   stage: packagetest
   script:
     - cd archlinux
-    - pacman -U python-fire-jack*.pkg.tar.xz --noconfirm
+    - pacman -U epsolar-tracer*.pkg.tar.xz --noconfirm
   tags:
     - virtualbox-archlinux
   dependencies:
