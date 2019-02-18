@@ -41,7 +41,7 @@ test:archlinux:
 package:archlinux:
   stage: package
   script:
-    - pacman -Sy python-pip sudo openssh binutils fakeroot --noconfirm
+    - pacman -Sy python-pip sudo openssh binutils fakeroot base --noconfirm
     - useradd -m -G users -s /bin/bash package
     - chown -R package:users archlinux
     - cd archlinux
