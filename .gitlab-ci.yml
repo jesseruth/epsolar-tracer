@@ -8,6 +8,7 @@ test:debian:
   stage: test
   script:
     - apt-get update -qy
+    - apt-get upgrade -qy
     - apt-get install -y python3-setuptools
     - python3 setup.py test
   tags:
@@ -25,6 +26,7 @@ package:debian:
   stage: package
   script:
     - apt-get update -qy
+    - apt-get upgrade -qy
     - apt-get install -y python-all python3-stdeb
     - rm -rf "./deb_dist"
     - python3 setup.py --command-packages=stdeb.command bdist_deb
