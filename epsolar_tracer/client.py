@@ -32,7 +32,12 @@ class EPsolarTracerClient:
         """ Connect to the serial
         :returns: True if connection succeeded, False otherwise
         """
-        return self.client.connect()
+        try:
+            return self.client.connect()
+        except AttributeError:
+            # !FIXME there is bug in pymodbus when rtu mode is used and connection is not made:
+            # !FIXME AttributeError: 'NoneType' object has no attribute 'interCharTimeout' that simply means connection failed
+            return False
 
     def close(self):
         """ Closes the underlying connection
@@ -40,7 +45,6 @@ class EPsolarTracerClient:
         return self.client.close()
 
     def read_device_info(self):
-        print(self.client)
         request = ReadDeviceInformationRequest(unit=self.unit)
         response = self.client.execute(request)
         return response
