@@ -16,7 +16,7 @@ test:debian:
 test:archlinux:
   stage: test
   script:
-    - pacman -Sy python --noconfirm
+    - pacman -Sy python-setuptools --noconfirm
     - python setup.py test
   tags:
     - archlinux
