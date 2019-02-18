@@ -51,7 +51,7 @@ package:archlinux:
 
   artifacts:
     paths:
-      - archlinux/epsolar-tracer*
+      - archlinux/python-epsolar-tracer*
     expire_in: 1d
 
 #packagetest:debian:
@@ -71,7 +71,7 @@ packagetest:archlinux:
   stage: packagetest
   script:
     - cd archlinux
-    - pacman -U epsolar-tracer*.pkg.tar.xz --noconfirm
+    - pacman -U python-epsolar-tracer*.pkg.tar.xz --noconfirm
   tags:
     - virtualbox-archlinux
   dependencies:
