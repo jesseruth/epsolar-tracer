@@ -1,0 +1,106 @@
+stages:
+  - test
+  - package
+  - packagetest
+  - deploy
+
+test:debian:
+  stage: test
+  script:
+    - apt-get update -qy
+    - apt-get install -y python3-setuptools
+    - python3 setup.py test
+  tags:
+    - debian
+
+test:archlinux:
+  stage: test
+  script:
+    - python setup.py test
+  tags:
+    - archlinux
+
+package:debian:
+  stage: package
+  script:
+    - apt-get update -qy
+    - apt-get install -y python-all python3-stdeb
+    - rm -rf "./deb_dist"
+    - python3 setup.py --command-packages=stdeb.command bdist_deb
+  tags:
+    - debian
+
+  artifacts:
+    paths:
+      - deb_dist/*.deb
+    expire_in: 1d
+
+package:archlinux:
+  stage: package
+  script:
+    - pacman -Sy python-pip sudo openssh binutils fakeroot --noconfirm
+    - useradd -m -G users -s /bin/bash package
+    - chown -R package:users archlinux
+    - cd archlinux
+    - sudo -H -u package makepkg -f
+  tags:
+    - archlinux
+
+  artifacts:
+    paths:
+      - archlinux/epsolar-tracer*
+    expire_in: 1d
+
+packagetest:debian:
+  stage: packagetest
+  script:
+    - apt-get update -qy
+    - cd deb_dist
+    - apt install ./*.deb -qy
+  tags:
+    - virtualbox-debian
+  dependencies:
+    - package:debian
+  only:
+    - tags
+
+packagetest:archlinux:
+  stage: packagetest
+  script:
+    - cd archlinux
+    - pacman -U python-fire-jack*.pkg.tar.xz --noconfirm
+  tags:
+    - virtualbox-archlinux
+  dependencies:
+    - package:archlinux
+  only:
+    - tags
+
+repoupdate:
+  stage: deploy
+  variables:
+    TWINE_USERNAME: Salamek
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - apt-get update -y
+    - apt-get install twine python-setuptools -y
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  script:
+    - ssh www-data@salamek.cz 'rm -rf /var/www/arch-private.salamek.cz/www/any/python-epsolar-tracer*.pkg.tar.xz'
+    - ssh www-data@salamek.cz 'rm -rf /var/www/apt-private.salamek.cz/cache/python3-epsolar-tracer*.pkg.tar.xz'
+    - scp archlinux/python-epsolar-tracer*.pkg.tar.xz www-data@salamek.cz:/var/www/arch-private.salamek.cz/www/any
+    - scp deb_dist/*.deb www-data@salamek.cz:/var/www/apt-private.salamek.cz/cache
+    - ssh www-data@salamek.cz '/var/www/arch-private.salamek.cz/update_repo.sh'
+    - ssh www-data@salamek.cz '/var/www/apt-private.salamek.cz/update_repo.sh'
+    - python3 setup.py sdist
+    - twine upload dist/*
+  dependencies:
+    - package:archlinux
+    - package:debian
+  tags:
+    - docker
+  only:
+    - tags
