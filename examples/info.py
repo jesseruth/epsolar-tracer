@@ -1,23 +1,18 @@
+import sys
+
 from epsolar_tracer.client import EPsolarTracerClient
-from epsolar_tracer.registers import registers, coils
-# from test.testdata import ModbusMockClient as ModbusClient
-from pymodbus.client.sync import ModbusSerialClient as ModbusClient
 
-# configure the client logging
-import logging
+default_port = '/dev/ttyXRUSB0'
 
-logging.basicConfig()
-log = logging.getLogger()
-log.setLevel(logging.INFO)
+port = input('Enter serial port to use [{}]:'.format(default_port)) or default_port
 
-serialclient = ModbusClient(method='rtu', port='/dev/ttyUSB0', baudrate=115200)
+client = EPsolarTracerClient(port=port)
 
-#serialclient = ModbusClient()
-
-# serialclient = None
-
-client = EPsolarTracerClient(serialclient=serialclient)
-client.connect()
+if client.connect():
+    print('Connected successfully to {}'.format(port))
+else:
+    print('Connection failed to {}'.format(port))
+    sys.exit(1)
 
 response = client.read_device_info()
 print("Manufacturer: {}".format(repr(response.information[0])))
@@ -30,10 +25,9 @@ response = client.read_input("Charging equipment output current")
 
 print(str(response))
 
+# response = client.write_output("Manual control the load", 0)
 
-#response = client.write_output("Manual control the load", 0)
-
-#print(str(response))
+# print(str(response))
 
 """
 for reg in registers:
