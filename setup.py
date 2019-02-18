@@ -26,7 +26,7 @@ classifiers = [s.strip() for s in classes.split('\n') if s]
 install_requires = get_requirements('requirements.txt')
 setup(
     name='epsolar-tracer',
-    version='0.0.2',
+    version='0.0.3',
     description='Tools for EPsolar Tracer A and BN solar charge controller',
     long_description=open('README.md').read(),
     author='Adam Schubert',
