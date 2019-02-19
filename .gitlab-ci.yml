@@ -83,7 +83,6 @@ repoupdate:
   stage: deploy
   variables:
     TWINE_USERNAME: Salamek
-    TWINE_PASSWORD: wtf_gitlab
   before_script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - apt-get update -y
@@ -100,6 +99,8 @@ repoupdate:
     - ssh www-data@salamek.cz '/var/www/arch.salamek.cz/update_repo.sh'
     #- ssh www-data@salamek.cz '/var/www/apt-private.salamek.cz/update_repo.sh'
     - python3 setup.py sdist
+    - echo $TWINE_USERNAME
+    - echo $TWINE_PASSWORD
     - twine upload dist/*
   dependencies:
     - package:archlinux
