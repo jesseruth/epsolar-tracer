@@ -120,4 +120,4 @@ test:
   script:
     - twine upload dist/*
   tags:
-    - docker
+    - debian
