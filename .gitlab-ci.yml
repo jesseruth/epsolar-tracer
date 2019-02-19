@@ -1,4 +1,5 @@
 stages:
+  - wth
   - test
   - package
   - packagetest
@@ -99,7 +100,6 @@ repoupdate:
     - ssh www-data@salamek.cz '/var/www/arch.salamek.cz/update_repo.sh'
     #- ssh www-data@salamek.cz '/var/www/apt-private.salamek.cz/update_repo.sh'
     - python3 setup.py sdist
-    - cat ~/.pypirc
     - twine upload dist/*
   dependencies:
     - package:archlinux
@@ -108,3 +108,17 @@ repoupdate:
     - docker
   only:
     - tags
+
+
+test:
+  stage: wth
+  variables:
+    TWINE_USERNAME: Salamek
+  before_script:
+    - apt-get update -y
+    - apt-get install twine python3-setuptools -y
+  script:
+    - cat ~/.pypirc
+    - twine upload dist/*
+  tags:
+    - docker
