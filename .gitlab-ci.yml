@@ -118,7 +118,6 @@ test:
     - apt-get update -y
     - apt-get install twine python3-setuptools -y
   script:
-    - cat ~/.pypirc
     - twine upload dist/*
   tags:
     - docker
