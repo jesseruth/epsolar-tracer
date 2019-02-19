@@ -99,8 +99,7 @@ repoupdate:
     - ssh www-data@salamek.cz '/var/www/arch.salamek.cz/update_repo.sh'
     #- ssh www-data@salamek.cz '/var/www/apt-private.salamek.cz/update_repo.sh'
     - python3 setup.py sdist
-    - echo $TWINE_USERNAME
-    - echo $TWINE_PASSWORD
+    - cat ~/.pypirc
     - twine upload dist/*
   dependencies:
     - package:archlinux
