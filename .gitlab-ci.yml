@@ -1,5 +1,4 @@
 stages:
-  - wth
   - test
   - package
   - packagetest
@@ -105,19 +104,6 @@ repoupdate:
     - package:archlinux
     #- package:debian
   tags:
-    - docker
+    - debian
   only:
     - tags
-
-
-test:
-  stage: wth
-  variables:
-    TWINE_USERNAME: Salamek
-  before_script:
-    - apt-get update -y
-    - apt-get install twine python3-setuptools -y
-  script:
-    - twine upload dist/*
-  tags:
-    - debian
