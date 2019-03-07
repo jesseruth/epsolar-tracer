@@ -10,12 +10,15 @@ used RS-232 and a different protocol. see https://github.com/xxv/tracer.
 [Product link 1](http://www.epsolarpv.com/en/index.php/Product/pro_content/id/573/am_id/136)  
 [Product link 2](http://www.epsolarpv.com/en/index.php/Product/index/id/653/am_id/134)
 
-Protocol
---------
-[Protocol](http://www.solar-elektro.cz/data/dokumenty/1733_modbus_protocol.pdf)
-See for [windows capture](archive/epsolar.txt) for some extra commands.
+Installation
+------------
 
-Python module
+Pip
+```
+pip3 install epsolar-tracer
+```
+
+Python 3 module
 -------------
 Uses modbus library (https://github.com/bashwork/pymodbus)  
 Example output
@@ -29,3 +32,7 @@ Charging equipment rated input voltage = 150.0V
 Charging equipment rated input current = 20.0A
 ...
 ```
+Protocol
+--------
+[Protocol](http://www.solar-elektro.cz/data/dokumenty/1733_modbus_protocol.pdf)
+See for [windows capture](archive/epsolar.txt) for some extra commands.
