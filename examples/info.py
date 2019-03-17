@@ -1,6 +1,7 @@
 import sys
 
 from epsolar_tracer.client import EPsolarTracerClient
+from epsolar_tracer.enums.RegisterTypeEnum import RegisterTypeEnum
 
 default_port = '/dev/ttyXRUSB0'
 
@@ -19,9 +20,9 @@ print("Manufacturer: {}".format(repr(response.information[0])))
 print("Model: {}".format(repr(response.information[1])))
 print("Version: {}".format(repr(response.information[2])))
 
-response = client.read_input("Battery SOC")
+response = client.read_input(RegisterTypeEnum.BATTERY_SOC)
 print(str(response))
-response = client.read_input("Charging equipment output current")
+response = client.read_input(RegisterTypeEnum.CHARGING_EQUIPMENT_OUTPUT_CURRENT)
 
 print(str(response))
 
@@ -30,7 +31,7 @@ print(str(response))
 # print(str(response))
 
 """
-for reg in registers:
+for reg_type, reg in registers.items():
     # print
     # print reg
     value = client.read_input(reg.name)
@@ -38,7 +39,7 @@ for reg in registers:
     # if value.value is not None:
     #    print client.write_output(reg.name,value.value)
 
-for reg in coils:
+for reg_type, reg in coils.items():
     # print
     # print reg
     value = client.read_input(reg.name)

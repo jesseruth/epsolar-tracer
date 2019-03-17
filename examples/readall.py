@@ -19,7 +19,7 @@ request = ReadDeviceInformationRequest(unit=1)
 response = client.execute(request)
 print(repr(response.information))
 
-for reg in registers:
+for rey_type, reg in registers.items():
     print()
     print(reg)
     rr = client.read_input_registers(reg.address, 1, unit=1)
@@ -33,7 +33,7 @@ for reg in registers:
     else:
         print("read_holding_registers: {}".format(str(rr)))
 
-for reg in coils:
+for coil_type, reg in coils.items():
     print()
     print(reg)
     rr = client.read_coils(reg.address, unit=1)
