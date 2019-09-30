@@ -56,8 +56,10 @@ class EPsolarTracerClient:
     def read_input(self, register_type: Union[RegisterTypeEnum, CoilTypeEnum]):
         if type(register_type) == 'str':
             register = registerByName(register_type)
-        else:
+        elif type(register_type) == RegisterTypeEnum:
             register = registers.get(register_type)
+        elif type(register_type) == CoilTypeEnum:
+            register = coils.get(register_type)
 
         if not register:
             raise Exception("Unknown register {}".format(register_type.name))
@@ -75,8 +77,10 @@ class EPsolarTracerClient:
     def write_output(self, register_type: Union[RegisterTypeEnum, CoilTypeEnum], value):
         if type(register_type) == 'str':
             register = registerByName(register_type)
-        else:
+        elif type(register_type) == RegisterTypeEnum:
             register = registers.get(register_type)
+        elif type(register_type) == CoilTypeEnum:
+            register = coils.get(register_type)
 
         if not register:
             raise Exception("Unknown register {}".format(register_type.name))
