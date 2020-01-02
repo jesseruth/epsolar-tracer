@@ -10,7 +10,7 @@ log = logging.getLogger()
 log.setLevel(logging.INFO)
 
 serialclient = ModbusClient()
-#serialclient = None
+serialclient = None
 
 client = EPsolarTracerClient(serialclient = serialclient)
 client.connect()
